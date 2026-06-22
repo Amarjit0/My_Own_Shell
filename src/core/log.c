@@ -31,7 +31,8 @@ void ks_log(ks_log_level_t level, const char *file, int line, const char *fmt, .
     // Get timestamp
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    struct tm *tm_info = localtime(&tv.tv_sec);
+    time_t sec = tv.tv_sec;
+    struct tm *tm_info = localtime(&sec);
     
     char timestamp[32];
     strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", tm_info);

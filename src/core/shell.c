@@ -205,7 +205,7 @@ int ks_shell_init(ks_shell_t *shell) {
     memset(shell, 0, sizeof(ks_shell_t));
     
     // Get username
-    struct passwd *pw = getpwuid(getuid());
+    passwd *pw = getpwuid(getuid());
     if (pw) {
         shell->username = strdup(pw->pw_name);
     } else {

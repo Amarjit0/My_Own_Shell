@@ -60,7 +60,7 @@ int ks_platform_execute_background(const char *cmd) {
 }
 
 // Check if command exists
-int ks_platform_command_exists(const char *cmd) {
+bool ks_platform_command_exists(const char *cmd) {
     if (!cmd) return 0;
     
     char check_cmd[1024];

@@ -5,26 +5,104 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <signal.h>
-#include <unistd.h>
-#include <pwd.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <dirent.h>
 #include <errno.h>
 #include <time.h>
 #include <ctype.h>
 #include <stdint.h>
 
-// Version
-#define GUPT_VERSION "0.1.0"
-#define GUPT_NAME "Gupt"
-
-// Constants
+// Constants (must be before platform section)
 #define MAX_INPUT_SIZE 4096
 #define MAX_ARGS 256
 #define MAX_PATH_SIZE 1024
 #define MAX_HISTORY_SIZE 1000
+
+// Platform-specific headers
+#ifdef _WIN32
+    #ifndef GUPT_PLATFORM_WINDOWS
+        #define GUPT_PLATFORM_WINDOWS
+    #endif
+    #include <windows.h>
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #include <direct.h>
+    #include <io.h>
+    #include <sys/stat.h>
+    #include <sys/timeb.h>
+    #define PATH_SEPARATOR '\\'
+    #define getcwd _getcwd
+    #define chdir _chdir
+    #define mkdir(p, m) _mkdir(p)
+    #define access _access
+    #define F_OK 0
+    #define stat _stat
+    #ifndef S_ISDIR
+        #define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+    #endif
+    typedef struct { char *pw_name; } passwd;
+    static inline passwd *getpwuid(int uid) { 
+        static passwd pw = {"user"};
+        return &pw;
+    }
+    static inline int getuid() { return 0; }
+    #define SIGINT 2
+    #define SIGTERM 15
+    static inline void (*signal(int sig, void (*handler)(int)))(int) { (void)sig; (void)handler; return NULL; }
+    static inline int gettimeofday(struct timeval *tv, void *tz) {
+        struct _timeb tb;
+        _ftime64_s(&tb);
+        tv->tv_sec = (long)tb.time;
+        tv->tv_usec = tb.millitm * 1000;
+        return 0;
+    }
+    #define strcasecmp _stricmp
+    // POSIX-compatible DIR/dirent for Windows
+    struct dirent {
+        char d_name[MAX_PATH_SIZE];
+    };
+    typedef struct {
+        intptr_t handle;
+        struct _finddata_t info;
+        struct dirent entry;
+        int has_entry;
+    } DIR;
+    static inline DIR *opendir(const char *path) {
+        static DIR dir;
+        char pattern[MAX_PATH_SIZE];
+        snprintf(pattern, MAX_PATH_SIZE, "%s\\*", path);
+        dir.handle = _findfirst(pattern, &dir.info);
+        if (dir.handle != -1) {
+            strncpy(dir.entry.d_name, dir.info.name, MAX_PATH_SIZE - 1);
+            dir.has_entry = 1;
+        } else {
+            dir.has_entry = 0;
+        }
+        return &dir;
+    }
+    static inline struct dirent *readdir(DIR *dir) {
+        if (!dir->has_entry) return NULL;
+        if (_findnext(dir->handle, &dir->info) == 0) {
+            strncpy(dir->entry.d_name, dir->info.name, MAX_PATH_SIZE - 1);
+        } else {
+            dir->has_entry = 0;
+        }
+        return &dir->entry;
+    }
+    static inline int closedir(DIR *dir) {
+        _findclose(dir->handle);
+        return 0;
+    }
+#else
+    #include <unistd.h>
+    #include <pwd.h>
+    #include <sys/stat.h>
+    #include <sys/time.h>
+    #include <dirent.h>
+    #define PATH_SEPARATOR '/'
+#endif
+
+// Version
+#define GUPT_VERSION "0.1.0"
+#define GUPT_NAME "Gupt"
 
 // Colors (ANSI)
 #define COLOR_RESET     "\033[0m"

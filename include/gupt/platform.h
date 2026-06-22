@@ -72,7 +72,6 @@ char *ks_platform_normalize_path(const char *path);
 // Execute command
 int ks_platform_execute(const char *cmd, char *output, size_t output_size);
 int ks_platform_execute_background(const char *cmd);
-int ks_platform_command_exists(const char *cmd);
 
 // Directory operations
 char *ks_platform_get_cwd(void);

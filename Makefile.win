@@ -1,0 +1,32 @@
+# Gupt Windows Cross-Compile Makefile (from Linux)
+
+CC = x86_64-w64-mingw32-gcc
+CFLAGS = -Wall -Iinclude -Iinclude -D_DEFAULT_SOURCE  -DSQLITE_THREADSAFE=0
+LDFLAGS = -lm -lws2_32
+
+# Source files (including sqlite3.c directly)
+SOURCES = src/utils/sqlite3.c src/core/main.c src/core/shell.c src/core/config.c src/core/log.c \
+    src/parser/parser.c \
+    src/workspace/database.c src/workspace/workspace.c \
+    src/tools/tool.c src/tools/pipeline.c src/tools/orchestrator.c \
+    src/graph/graph.c src/graph/visualization.c \
+    src/scripting/dsl.c src/scripting/lua_engine.c \
+    src/tui/tui.c src/tui/dashboard.c src/tui/progress.c src/tui/themes.c \
+    src/findings/finding.c src/findings/cvss.c src/findings/template.c \
+    src/reports/report.c src/reports/markdown.c src/reports/export.c \
+    src/plugins/plugin.c src/plugins/loader.c src/plugins/api.c \
+    src/ai/ai.c src/ai/ollama.c src/ai/analyzer.c \
+    src/utils/platform_win.c src/utils/file_utils.c src/utils/string_utils.c
+
+TARGET = build/gupt.exe
+
+all: $(TARGET)
+
+$(TARGET):
+	@mkdir -p build
+	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET) $(LDFLAGS)
+
+clean:
+	rm -f $(TARGET)
+
+.PHONY: all clean
