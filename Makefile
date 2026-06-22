@@ -18,8 +18,8 @@ LDFLAGS += $(LUA_LIBS) $(CURSES_LIBS)
 SRCDIR = src
 BUILDDIR = build
 
-# Source files
-SOURCES = $(wildcard $(SRCDIR)/**/*.c)
+# Source files - exclude Windows-specific files on Linux
+SOURCES = $(shell find $(SRCDIR) -name '*.c' ! -name 'platform_win.c')
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
 
 # Target

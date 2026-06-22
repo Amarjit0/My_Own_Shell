@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Basic KaliShell
+  kalishell:
+    build: .
+    image: kalishell:latest
+    container_name: kalishell
+    volumes:
+      - ./workspaces:/workspace
+      - ./config:/etc/kalishell
+    stdin_open: true
+    tty: true
+
+  # KaliShell with Kali tools
+  kali-full:
+    build:
+      context: .
+      dockerfile: Dockerfile.kali
+    image: kalishell:kali
+    container_name: kalishell-kali
+    volumes:
+      - ./workspaces:/workspace
+    privileged: true
+    stdin_open: true
+    tty: true
