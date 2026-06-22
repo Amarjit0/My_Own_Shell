@@ -9,6 +9,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <stdint.h>
+#include <signal.h>
 
 // Constants (must be before platform section)
 #define MAX_INPUT_SIZE 4096
