@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 char *ks_file_read(const char *path) {
     FILE *f = fopen(path, "r");

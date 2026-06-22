@@ -1,5 +1,5 @@
-#include "kalishell/kalishell.h"
-#include "kalishell/platform.h"
+#include "gupt/gupt.h"
+#include "gupt/platform.h"
 
 #ifdef KS_PLATFORM_WINDOWS
 

@@ -1,4 +1,4 @@
-# KaliShell Makefile
+# Gupt Makefile
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -g -Iinclude
@@ -23,7 +23,7 @@ SOURCES = $(shell find $(SRCDIR) -name '*.c' ! -name 'platform_win.c')
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
 
 # Target
-TARGET = $(BUILDDIR)/kalishell
+TARGET = $(BUILDDIR)/gupt
 
 # Default target
 all: $(TARGET)

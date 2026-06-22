@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 // Ollama client stub
 typedef struct {

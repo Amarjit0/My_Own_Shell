@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 #ifdef _WIN32
 #include <windows.h>

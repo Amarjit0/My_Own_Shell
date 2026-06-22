@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 #include <stdarg.h>
 
 static ks_log_level_t current_level = LOG_INFO;

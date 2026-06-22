@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 typedef struct {
     char *name;

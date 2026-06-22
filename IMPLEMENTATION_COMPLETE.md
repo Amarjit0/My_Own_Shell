@@ -1,4 +1,4 @@
-# KaliShell - Implementation Complete
+# Gupt - Implementation Complete
 
 ## What Was Built
 
@@ -73,8 +73,8 @@
 ## Project Structure
 
 ```
-kalishell/
-├── build/kalishell          # Compiled binary
+gupt/
+├── build/gupt          # Compiled binary
 ├── src/                     # 30+ source files
 │   ├── core/               # Shell core logic
 │   ├── parser/             # Command parsing
@@ -88,7 +88,7 @@ kalishell/
 │   ├── plugins/            # Plugin system
 │   ├── ai/                 # AI integration
 │   └── utils/              # Utility functions
-├── include/kalishell/       # Header files
+├── include/gupt/       # Header files
 ├── tools/definitions/       # Tool YAML definitions
 ├── scripts/                 # Example scripts
 ├── config/                  # Configuration
@@ -136,9 +136,9 @@ kalishell/
 ## Building
 
 ```bash
-cd kalishell
+cd gupt
 make
-./build/kalishell
+./build/gupt
 ```
 
 ## Next Steps

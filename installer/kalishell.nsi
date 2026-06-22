@@ -1,18 +1,18 @@
-; KaliShell NSIS Installer Script
+; Gupt NSIS Installer Script
 ; https://nsis.sourceforge.io/
 
 !include "MUI2.nsh"
 
 ; General
-Name "KaliShell"
-OutFile "KaliShell-Installer.exe"
-InstallDir "$PROGRAMFILES\KaliShell"
-InstallDirRegKey HKLM "Software\KaliShell" "InstallDir"
+Name "Gupt"
+OutFile "Gupt-Installer.exe"
+InstallDir "$PROGRAMFILES\Gupt"
+InstallDirRegKey HKLM "Software\Gupt" "InstallDir"
 RequestExecutionLevel admin
 
 ; Version info
 VIProductVersion "0.1.0"
-VIAddVersionKey "ProductName" "KaliShell"
+VIAddVersionKey "ProductName" "Gupt"
 VIAddVersionKey "FileDescription" "Security Operating Environment"
 VIAddVersionKey "LegalCopyright" "MIT License"
 VIAddVersionKey "FileVersion" "0.1.0"
@@ -34,21 +34,21 @@ VIAddVersionKey "FileVersion" "0.1.0"
 !insertmacro MUI_LANGUAGE "English"
 
 ; Installer sections
-Section "KaliShell (Required)"
+Section "Gupt (Required)"
     SectionIn RO
     
     ; Set output path to installation directory
     SetOutPath $INSTDIR
     
     ; Add files
-    File "build\kalishell.exe"
+    File "build\gupt.exe"
     File "LICENSE"
     File "README.md"
     
     ; Create config directory
     CreateDirectory "$INSTDIR\config"
     SetOutPath "$INSTDIR\config"
-    File "config\kalishell.yaml"
+    File "config\gupt.yaml"
     
     ; Create tools directory
     CreateDirectory "$INSTDIR\tools"
@@ -65,7 +65,7 @@ Section "KaliShell (Required)"
     CreateDirectory "$INSTDIR\workspaces"
     
     ; Store installation path
-    WriteRegStr HKLM "Software\KaliShell" "InstallDir" "$INSTDIR"
+    WriteRegStr HKLM "Software\Gupt" "InstallDir" "$INSTDIR"
     
     ; Create uninstaller
     WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -74,26 +74,26 @@ Section "KaliShell (Required)"
     Environ::AddPath "$INSTDIR"
     
     ; Create Start Menu shortcuts
-    CreateDirectory "$SMPROGRAMS\KaliShell"
-    CreateShortcut "$SMPROGRAMS\KaliShell\KaliShell.lnk" "$INSTDIR\kalishell.exe"
-    CreateShortcut "$SMPROGRAMS\KaliShell\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+    CreateDirectory "$SMPROGRAMS\Gupt"
+    CreateShortcut "$SMPROGRAMS\Gupt\Gupt.lnk" "$INSTDIR\gupt.exe"
+    CreateShortcut "$SMPROGRAMS\Gupt\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
     
     ; Add to Add/Remove Programs
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "DisplayName" "KaliShell"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "UninstallString" "$\"$INSTDIR\Uninstall.exe$\""
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "QuietUninstallString" "$\"$INSTDIR\Uninstall.exe$\" /S"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "InstallLocation" "$INSTDIR"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "DisplayVersion" "0.1.0"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "Publisher" "KaliShell"
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "NoModify" 1
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell" "NoRepair" 1
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "DisplayName" "Gupt"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "UninstallString" "$\"$INSTDIR\Uninstall.exe$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "QuietUninstallString" "$\"$INSTDIR\Uninstall.exe$\" /S"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "InstallLocation" "$INSTDIR"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "DisplayVersion" "0.1.0"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "Publisher" "Gupt"
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "NoModify" 1
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt" "NoRepair" 1
     
 SectionEnd
 
 ; Uninstaller section
 Section "Uninstall"
     ; Remove files
-    Delete "$INSTDIR\kalishell.exe"
+    Delete "$INSTDIR\gupt.exe"
     Delete "$INSTDIR\LICENSE"
     Delete "$INSTDIR\README.md"
     Delete "$INSTDIR\Uninstall.exe"
@@ -109,10 +109,10 @@ Section "Uninstall"
     Environ::RemovePath "$INSTDIR"
     
     ; Remove Start Menu shortcuts
-    RMDir /r "$SMPROGRAMS\KaliShell"
+    RMDir /r "$SMPROGRAMS\Gupt"
     
     ; Remove registry keys
-    DeleteRegKey HKLM "Software\KaliShell"
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\KaliShell"
+    DeleteRegKey HKLM "Software\Gupt"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gupt"
     
 SectionEnd

@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 #ifdef HAVE_NCURSES
 #include <ncurses.h>
@@ -74,7 +74,7 @@ int ks_tui_draw_progress(const char *label, int percent) {
 int ks_tui_draw_dashboard(void) {
     printf("\n");
     printf(COLOR_BOLD "╔══════════════════════════════════════════════════════════════╗\n" COLOR_RESET);
-    printf(COLOR_BOLD "║                    KaliShell Dashboard                       ║\n" COLOR_RESET);
+    printf(COLOR_BOLD "║                    Gupt Dashboard                       ║\n" COLOR_RESET);
     printf(COLOR_BOLD "╚══════════════════════════════════════════════════════════════╝\n" COLOR_RESET);
     printf("\n");
     

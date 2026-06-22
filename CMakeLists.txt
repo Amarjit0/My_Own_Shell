@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(kalishell VERSION 0.1.0 LANGUAGES C)
+project(gupt VERSION 0.1.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -141,35 +141,35 @@ set(ALL_SOURCES
 
 # Create executable
 if(WIN32)
-    add_executable(kalishell WIN32 ${ALL_SOURCES})
+    add_executable(gupt WIN32 ${ALL_SOURCES})
 else()
-    add_executable(kalishell ${ALL_SOURCES})
+    add_executable(gupt ${ALL_SOURCES})
 endif()
 
 # Link libraries
-target_link_libraries(kalishell
+target_link_libraries(gupt
     ${SQLite3_LIBRARIES}
     ${PLATFORM_LIBS}
 )
 
 # Compiler flags
 if(MSVC)
-    target_compile_options(kalishell PRIVATE /W4)
+    target_compile_options(gupt PRIVATE /W4)
 else()
-    target_compile_options(kalishell PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(gupt PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 # Debug/Release configurations
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(kalishell PRIVATE DEBUG)
-    target_compile_options(kalishell PRIVATE -g)
+    target_compile_definitions(gupt PRIVATE DEBUG)
+    target_compile_options(gupt PRIVATE -g)
 else()
-    target_compile_definitions(kalishell PRIVATE NDEBUG)
-    target_compile_options(kalishell PRIVATE -O2)
+    target_compile_definitions(gupt PRIVATE NDEBUG)
+    target_compile_options(gupt PRIVATE -O2)
 endif()
 
 # Install target
-install(TARGETS kalishell DESTINATION bin)
-install(FILES config/kalishell.yaml DESTINATION share/kalishell)
-install(DIRECTORY tools/ DESTINATION share/kalishell/tools)
-install(DIRECTORY scripts/ DESTINATION share/kalishell/scripts)
+install(TARGETS gupt DESTINATION bin)
+install(FILES config/gupt.yaml DESTINATION share/gupt)
+install(DIRECTORY tools/ DESTINATION share/gupt/tools)
+install(DIRECTORY scripts/ DESTINATION share/gupt/scripts)

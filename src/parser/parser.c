@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 int ks_parse_command(char *input, char **argv, int *argc) {
     if (!input || !argv || !argc) {

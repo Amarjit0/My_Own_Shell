@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 #include <sqlite3.h>
 
 extern ks_shell_t shell;
@@ -8,7 +8,7 @@ static char *get_workspaces_dir(void) {
     if (!home) {
         home = "/tmp";
     }
-    return ks_path_join(home, ".kalishell/workspaces");
+    return ks_path_join(home, ".gupt/workspaces");
 }
 
 static int workspace_callback(void *data, int argc, char **argv, char **colnames) {

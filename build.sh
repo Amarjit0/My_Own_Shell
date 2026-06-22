@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# KaliShell Build Script
+# Gupt Build Script
 
 set -e
 
-echo "Building KaliShell..."
+echo "Building Gupt..."
 
 # Check for required tools
 command -v gcc >/dev/null 2>&1 || { echo "gcc not found. Installing..."; sudo apt-get install -y gcc; }
@@ -41,5 +41,5 @@ make -j$(nproc)
 
 echo ""
 echo "Build complete!"
-echo "Run with: ./build/kalishell"
+echo "Run with: ./build/gupt"
 echo ""

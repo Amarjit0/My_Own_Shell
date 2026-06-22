@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 // Tool registry
 static ks_tool_def_t *tools = NULL;

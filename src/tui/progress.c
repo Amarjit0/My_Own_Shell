@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 int ks_progress_start(const char *label, int total) {
     // TODO: Start progress tracking

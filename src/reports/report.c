@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 extern ks_shell_t shell;
 
@@ -31,7 +31,7 @@ ks_report_t *ks_report_create_new(const char *title, const char *target) {
     strftime(date_buf, sizeof(date_buf), "%Y-%m-%d", tm);
     report->date = strdup(date_buf);
     
-    report->author = strdup("KaliShell User");
+    report->author = strdup("Gupt User");
     
     return report;
 }

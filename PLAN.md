@@ -1,17 +1,17 @@
-# KaliShell - Security Operating Environment
+# Gupt - Security Operating Environment
 
 ## Vision
 
-A workspace-aware shell that understands targets, assets, findings, and reports natively. Unlike general-purpose shells (CMD, PowerShell, Bash), KaliShell is designed specifically for penetration testers and security researchers.
+A workspace-aware shell that understands targets, assets, findings, and reports natively. Unlike general-purpose shells (CMD, PowerShell, Bash), Gupt is designed specifically for penetration testers and security researchers.
 
 ## Core Concepts
 
 ### Everything Is an Asset
 ```
-kali> target example.com
-kali> recon
-kali> analyze
-kali> report
+gupt> target example.com
+gupt> recon
+gupt> analyze
+gupt> report
 ```
 
 ### Workspace Structure
@@ -29,7 +29,7 @@ example/
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    KaliShell (Windows/Linux)                │
+│                    Gupt (Windows/Linux)                │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
 │  │   Parser    │  │  Completer  │  │  Script Eng │         │
@@ -215,7 +215,7 @@ CREATE TABLE asset_relationships (
 ## File Structure
 
 ```
-kalishell/
+gupt/
 ├── CMakeLists.txt              # Build configuration
 ├── README.md                   # Project documentation
 ├── PLAN.md                     # This file
@@ -292,8 +292,8 @@ kalishell/
 │       ├── file_utils.h
 │       └── platform.c         # Platform abstraction
 ├── include/
-│   └── kalishell/
-│       ├── kalishell.h        # Main include
+│   └── gupt/
+│       ├── gupt.h        # Main include
 │       ├── types.h            # Common types
 │       └── errors.h           # Error codes
 ├── plugins/
@@ -317,7 +317,7 @@ kalishell/
 │       ├── katana.yaml
 │       └── nuclei.yaml
 ├── installer/
-│   ├── kalishell.nsi          # NSIS installer script
+│   ├── gupt.nsi          # NSIS installer script
 │   └── portable.bat           # Portable launcher
 ├── docs/
 │   ├── getting-started.md
@@ -329,7 +329,7 @@ kalishell/
 │   ├── test_workspace.c
 │   └── test_tools.c
 ├── config/
-│   └── kalishell.yaml         # Default configuration
+│   └── gupt.yaml         # Default configuration
 └── data/
     └── templates/             # Finding templates
         ├── xss.yaml
@@ -396,19 +396,19 @@ pipeline create <name>       # Create custom pipeline
 ## Example Workflow
 
 ```bash
-# Start KaliShell
-$ kalishell
+# Start Gupt
+$ gupt
 
 # Create workspace
-kali> workspace create example
+gupt> workspace create example
 [+] Workspace 'example' created
 
 # Add target
-kali> target add example.com
+gupt> target add example.com
 [+] Target 'example.com' added
 
 # Run recon pipeline
-kali> recon
+gupt> recon
 [*] Starting reconnaissance...
 [*] Running subfinder...
 [+] Found 154 subdomains
@@ -419,7 +419,7 @@ kali> recon
 [+] Reconnaissance complete
 
 # View results
-kali> show subdomains
+gupt> show subdomains
 ┌─────────────────────────────┬──────────┬────────────┐
 │ Subdomain                   │ Status   │ IP Address │
 ├─────────────────────────────┼──────────┼────────────┤
@@ -429,7 +429,7 @@ kali> show subdomains
 └─────────────────────────────┴──────────┴────────────┘
 
 # View asset graph
-kali> graph show
+gupt> graph show
 example.com
 ├── api.example.com
 │   ├── /api/v1/users
@@ -442,12 +442,12 @@ example.com
     └── /static/*
 
 # Analyze
-kali> analyze
+gupt> analyze
 [+] Analysis complete
 [+] Found 4 potential issues
 
 # Generate report
-kali> report generate
+gupt> report generate
 [+] Report generated: reports/example_2026-06-22.pdf
 ```
 

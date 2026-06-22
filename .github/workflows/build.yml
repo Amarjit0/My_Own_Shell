@@ -17,8 +17,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: kalishell-linux-x64
-          path: build/kalishell
+          name: gupt-linux-x64
+          path: build/gupt
 
   build-windows:
     runs-on: windows-latest
@@ -34,8 +34,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: kalishell-windows-x64
-          path: build/kalishell.exe
+          name: gupt-windows-x64
+          path: build/gupt.exe
 
   build-macos:
     runs-on: macos-latest
@@ -46,8 +46,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: kalishell-macos-arm64
-          path: build/kalishell
+          name: gupt-macos-arm64
+          path: build/gupt
 
   release:
     needs: [build-linux, build-windows, build-macos]
@@ -59,6 +59,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            kalishell-linux-x64/kalishell
-            kalishell-windows-x64/kalishell.exe
-            kalishell-macos-arm64/kalishell
+            gupt-linux-x64/gupt
+            gupt-windows-x64/gupt.exe
+            gupt-macos-arm64/gupt

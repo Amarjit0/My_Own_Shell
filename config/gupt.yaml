@@ -1,4 +1,4 @@
-# KaliShell Configuration
+# Gupt Configuration
 
 # General Settings
 version: "0.1.0"
@@ -6,7 +6,7 @@ author: "Amar"
 
 # Workspace Settings
 workspace:
-  base_dir: "~/.kalishell/workspaces"
+  base_dir: "~/.gupt/workspaces"
   auto_save: true
 
 # UI Settings
@@ -41,4 +41,4 @@ reports:
 # Logging
 logging:
   level: "info"
-  file: "~/.kalishell/logs/kalishell.log"
+  file: "~/.gupt/logs/gupt.log"

@@ -1,7 +1,7 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 // Plugin API version
-#define KALISHELL_PLUGIN_API_VERSION 1
+#define GUPT_PLUGIN_API_VERSION 1
 
 // Plugin function signatures
 typedef int (*plugin_init_func)(void);
@@ -43,7 +43,7 @@ int ks_plugin_init(void) {
     
     // Scan for plugins in plugin directory
     char *home = ks_platform_get_home();
-    char *plugin_dir = ks_path_join(home, ".kalishell/plugins");
+    char *plugin_dir = ks_path_join(home, ".gupt/plugins");
     
     if (plugin_dir && ks_path_exists(plugin_dir)) {
         ks_plugin_scan_dir(plugin_dir);

@@ -1,4 +1,4 @@
--- KaliShell Script: Basic Reconnaissance Pipeline
+-- Gupt Script: Basic Reconnaissance Pipeline
 -- This script demonstrates the security DSL concept
 
 -- Set target

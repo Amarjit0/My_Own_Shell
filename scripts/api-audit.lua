@@ -1,4 +1,4 @@
--- KaliShell Script: API Security Audit
+-- Gupt Script: API Security Audit
 -- This script demonstrates API-focused testing
 
 -- Set target

@@ -1,6 +1,6 @@
 # Installation Guide
 
-KaliShell runs on **Linux**, **Windows**, and **macOS**.
+Gupt runs on **Linux**, **Windows**, and **macOS**.
 
 ## Linux
 
@@ -18,7 +18,7 @@ sudo pacman -S gcc make sqlite
 git clone https://github.com/Amarjit0/My_Own_Shell.git
 cd My_Own_Shell
 make
-./build/kalishell
+./build/gupt
 ```
 
 ## Windows
@@ -33,7 +33,7 @@ pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-sqlite3
 git clone https://github.com/Amarjit0/My_Own_Shell.git
 cd My_Own_Shell
 mingw32-make
-build\kalishell.exe
+build\gupt.exe
 ```
 
 ### Visual Studio
@@ -54,7 +54,7 @@ cmake --build . --config Release
 ```
 
 ### Portable
-Download `kalishell.exe` from [Releases](https://github.com/Amarjit0/My_Own_Shell/releases)
+Download `gupt.exe` from [Releases](https://github.com/Amarjit0/My_Own_Shell/releases)
 
 ## macOS
 
@@ -63,7 +63,7 @@ xcode-select --install
 git clone https://github.com/Amarjit0/My_Own_Shell.git
 cd My_Own_Shell
 make
-./build/kalishell
+./build/gupt
 ```
 
 ## WSL
@@ -74,7 +74,7 @@ sudo apt install gcc make libsqlite3-dev
 git clone https://github.com/Amarjit0/My_Own_Shell.git
 cd My_Own_Shell
 make
-./build/kalishell
+./build/gupt
 ```
 
 ## Add to PATH
@@ -107,5 +107,5 @@ pacman -S mingw-w64-x86_64-sqlite3
 
 **Permission denied:**
 ```bash
-chmod +x build/kalishell
+chmod +x build/gupt
 ```

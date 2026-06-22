@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 #include <sqlite3.h>
 
 static sqlite3 *db = NULL;

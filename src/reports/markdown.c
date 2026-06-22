@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 char *ks_markdown_to_html(const char *markdown) {
     // TODO: Convert markdown to HTML

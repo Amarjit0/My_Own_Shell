@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 int ks_dashboard_show(void) {
     // TODO: Show dashboard with targets, findings, stats

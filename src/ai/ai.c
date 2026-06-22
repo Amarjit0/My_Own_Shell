@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 // AI configuration
 typedef struct {
@@ -19,7 +19,7 @@ static ks_ai_config_t ai_config = {
 
 // Initialize AI system
 int ks_ai_init(void) {
-    // Load config from kalishell.yaml
+    // Load config from gupt.yaml
     const char *provider = ks_config_get("ai.provider");
     const char *host = ks_config_get("ai.host");
     const char *model = ks_config_get("ai.model");

@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 char *ks_string_to_lower(const char *str) {
     if (!str) return NULL;

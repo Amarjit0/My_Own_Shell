@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 // Response analyzer stub
 int ks_analyzer_detect_framework(const char *response) {

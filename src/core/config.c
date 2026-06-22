@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 typedef struct {
     char *key;
@@ -113,7 +113,7 @@ int ks_config_save(const char *config_path) {
         return KS_ERROR_IO;
     }
     
-    fprintf(file, "# KaliShell Configuration\n\n");
+    fprintf(file, "# Gupt Configuration\n\n");
     fprintf(file, "# General Settings\n");
     
     for (int i = 0; i < config.count; i++) {

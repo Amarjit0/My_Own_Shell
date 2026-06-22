@@ -1,4 +1,4 @@
-#include "kalishell/kalishell.h"
+#include "gupt/gupt.h"
 
 int ks_export_pdf(const char *html, const char *output_path) {
     // TODO: Export to PDF using wkhtmltopdf or similar

@@ -1,8 +1,8 @@
 @echo off
-REM KaliShell Windows Build Script (MinGW)
+REM Gupt Windows Build Script (MinGW)
 
 echo ========================================
-echo   KaliShell Windows Build Script
+echo   Gupt Windows Build Script
 echo ========================================
 echo.
 
@@ -81,7 +81,7 @@ for %%f in (%SOURCES%) do (
 )
 
 echo [3/4] Linking...
-gcc build\*.o -o build\kalishell.exe %LIBS%
+gcc build\*.o -o build\gupt.exe %LIBS%
 
 if %errorlevel% neq 0 (
     echo [ERROR] Linking failed!
@@ -93,9 +93,9 @@ echo [4/4] Build complete!
 echo.
 echo ========================================
 echo   Build successful!
-echo   Output: build\kalishell.exe
+echo   Output: build\gupt.exe
 echo ========================================
 echo.
-echo Run with: build\kalishell.exe
+echo Run with: build\gupt.exe
 echo.
 pause
