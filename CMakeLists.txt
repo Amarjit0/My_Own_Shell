@@ -5,18 +5,52 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Platform detection
+if(WIN32)
+    add_definitions(-DKS_PLATFORM_WINDOWS)
+    set(PLATFORM_SOURCES src/utils/platform_win.c)
+    set(PLATFORM_LIBS ws2_32)
+elseif(UNIX)
+    add_definitions(-DKS_PLATFORM_UNIX)
+    set(PLATFORM_SOURCES src/utils/platform.c)
+    set(PLATFORM_LIBS dl m)
+endif()
+
 # Find required packages
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SQLITE3 REQUIRED sqlite3)
-pkg_check_modules(LUA REQUIRED lua5.4)
-pkg_check_modules(CURSES REQUIRED ncurses)
+find_package(PkgConfig QUIET)
+
+# SQLite3
+find_package(SQLite3 QUIET)
+if(NOT SQLite3_FOUND)
+    pkg_check_modules(SQLITE3 sqlite3)
+endif()
+
+# ncurses (optional)
+option(USE_NCURSES "Use ncurses for TUI" OFF)
+if(USE_NCURSES)
+    find_package(Curses QUIET)
+    if(CURSES_FOUND)
+        add_definitions(-DHAVE_NCURSES)
+        include_directories(${CURSES_INCLUDE_DIRS})
+        link_libraries(${CURSES_LIBRARIES})
+    endif()
+endif()
+
+# Lua (optional)
+option(USE_LUA "Use Lua for scripting" OFF)
+if(USE_LUA)
+    find_package(Lua QUIET)
+    if(LUA_FOUND)
+        add_definitions(-DHAVE_LUA)
+        include_directories(${LUA_INCLUDE_DIR})
+        link_libraries(${LUA_LIBRARIES})
+    endif()
+endif()
 
 # Include directories
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
-    ${SQLITE3_INCLUDE_DIRS}
-    ${LUA_INCLUDE_DIRS}
-    ${CURSES_INCLUDE_DIRS}
+    ${SQLite3_INCLUDE_DIRS}
 )
 
 # Source files
@@ -29,17 +63,11 @@ set(CORE_SOURCES
 
 set(PARSER_SOURCES
     src/parser/parser.c
-    src/parser/tokenizer.c
-)
-
-set(COMPLETION_SOURCES
-    src/completion/completion.c
 )
 
 set(WORKSPACE_SOURCES
     src/workspace/workspace.c
     src/workspace/database.c
-    src/workspace/target.c
 )
 
 set(TOOL_SOURCES
@@ -92,14 +120,13 @@ set(AI_SOURCES
 set(UTILS_SOURCES
     src/utils/string_utils.c
     src/utils/file_utils.c
-    src/utils/platform.c
+    ${PLATFORM_SOURCES}
 )
 
 # Combine all sources
 set(ALL_SOURCES
     ${CORE_SOURCES}
     ${PARSER_SOURCES}
-    ${COMPLETION_SOURCES}
     ${WORKSPACE_SOURCES}
     ${TOOL_SOURCES}
     ${GRAPH_SOURCES}
@@ -113,24 +140,36 @@ set(ALL_SOURCES
 )
 
 # Create executable
-add_executable(kalishell ${ALL_SOURCES})
+if(WIN32)
+    add_executable(kalishell WIN32 ${ALL_SOURCES})
+else()
+    add_executable(kalishell ${ALL_SOURCES})
+endif()
 
 # Link libraries
 target_link_libraries(kalishell
-    ${SQLITE3_LIBRARIES}
-    ${LUA_LIBRARIES}
-    ${CURSES_LIBRARIES}
-    dl
-    m
+    ${SQLite3_LIBRARIES}
+    ${PLATFORM_LIBS}
 )
 
 # Compiler flags
-target_compile_options(kalishell PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
-    -g
-)
+if(MSVC)
+    target_compile_options(kalishell PRIVATE /W4)
+else()
+    target_compile_options(kalishell PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+# Debug/Release configurations
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(kalishell PRIVATE DEBUG)
+    target_compile_options(kalishell PRIVATE -g)
+else()
+    target_compile_definitions(kalishell PRIVATE NDEBUG)
+    target_compile_options(kalishell PRIVATE -O2)
+endif()
 
 # Install target
 install(TARGETS kalishell DESTINATION bin)
+install(FILES config/kalishell.yaml DESTINATION share/kalishell)
+install(DIRECTORY tools/ DESTINATION share/kalishell/tools)
+install(DIRECTORY scripts/ DESTINATION share/kalishell/scripts)
