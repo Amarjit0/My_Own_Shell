@@ -1,0 +1,44 @@
+# KaliShell Configuration
+
+# General Settings
+version: "0.1.0"
+author: "Amar"
+
+# Workspace Settings
+workspace:
+  base_dir: "~/.kalishell/workspaces"
+  auto_save: true
+
+# UI Settings
+ui:
+  theme: "default"
+  colors: true
+  progress_bars: true
+
+# Tool Settings
+tools:
+  auto_detect: true
+  timeout: 300
+  
+# Pipeline Settings
+pipelines:
+  auto_chain: true
+  parallel: false
+
+# AI Settings
+ai:
+  enabled: false
+  provider: "ollama"
+  host: "localhost"
+  port: 11434
+  model: "llama3"
+
+# Report Settings
+reports:
+  default_format: "markdown"
+  auto_screenshot: true
+  
+# Logging
+logging:
+  level: "info"
+  file: "~/.kalishell/logs/kalishell.log"

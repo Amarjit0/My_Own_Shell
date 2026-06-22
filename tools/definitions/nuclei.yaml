@@ -1,0 +1,15 @@
+name: nuclei
+version: 3.3.7
+description: Fast and customizable vulnerability scanner
+command: nuclei
+args_template: -l {input} -o {output} -severity critical,high,medium
+output_format: json
+category: scanning
+tags:
+  - vulnerability
+  - scanning
+  - templates
+install:
+  linux: go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+  macos: go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+  windows: go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest

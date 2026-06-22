@@ -1,0 +1,15 @@
+name: subfinder
+version: 2.6.7
+description: Fast passive subdomain enumeration tool
+command: subfinder
+args_template: -d {target} -o {output}
+output_format: text
+category: reconnaissance
+tags:
+  - subdomains
+  - enumeration
+  - passive
+install:
+  linux: go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+  macos: go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+  windows: go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest

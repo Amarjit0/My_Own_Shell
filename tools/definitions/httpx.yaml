@@ -1,0 +1,15 @@
+name: httpx
+version: 1.6.10
+description: Fast and multi-purpose HTTP toolkit
+command: httpx
+args_template: -l {input} -o {output} -sc -title -tech-detect
+output_format: json
+category: reconnaissance
+tags:
+  - http
+  - probing
+  - technology-detection
+install:
+  linux: go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+  macos: go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+  windows: go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
