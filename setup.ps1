@@ -21,21 +21,55 @@ $GCC = "$MinGWDir\bin\gcc.exe"
 if (Test-Path $GCC) {
     Write-Host "  [OK] MinGW found" -ForegroundColor Green
 } else {
-    Write-Host "  [..] Downloading MinGW (50MB)..." -ForegroundColor Yellow
-    $MinGWUrl = "https://github.com/brechtsanders/winlibs_mingw/releases/download/14.2.0-UCRT-rt_v12-rev0.2/Win64-14.2.0-release-posix-seh-ucrt-rt_v12-rev0.2.zip"
-    $MinGWZip = "$SetupDir\mingw.zip"
+    Write-Host "  [..] Installing MinGW via winget..." -ForegroundColor Yellow
     
+    # Try winget first (Windows 10/11)
     try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-WebRequest -Uri $MinGWUrl -OutFile $MinGWZip -UseBasicParsing
+        winget install -e --id MSYS2.MSYS2 --accept-source-agreements --accept-package-agreements 2>$null
+        Write-Host "  [OK] MSYS2 installed" -ForegroundColor Green
+        
+        # Install gcc via MSYS2
+        & "C:\msys64\usr\bin\bash.exe" -lc "pacman -S --noconfirm mingw-w64-ucrt-x86_64-gcc" 2>$null
+        Write-Host "  [OK] GCC installed via MSYS2" -ForegroundColor Green
+        
+        # Copy gcc to our setup dir for portability
+        $MinGWDir = "$SetupDir\mingw64"
+        if (!(Test-Path "$MinGWDir\bin")) { New-Item -ItemType Directory -Path "$MinGWDir\bin" -Force | Out-Null }
+        Copy-Item "C:\msys64\ucrt64\bin\gcc.exe" "$MinGWDir\bin\" -ErrorAction SilentlyContinue
+        Copy-Item "C:\msys64\ucrt64\bin\make.exe" "$MinGWDir\bin\" -ErrorAction SilentlyContinue
+        Copy-Item "C:\msys64\ucrt64\bin\*.dll" "$MinGWDir\bin\" -ErrorAction SilentlyContinue
     } catch {
-        Write-Host "  [!!] Download failed." -ForegroundColor Red
-        Write-Host "       Check your internet connection and try again." -ForegroundColor Gray
-        exit 1
+        Write-Host "  [!!] winget failed. Trying direct download..." -ForegroundColor Yellow
+        
+        # Fallback: download from GitHub mirror
+        $MinGWUrl = "https://github.com/niXman/mingw-builds-binaries/releases/download/13.2.0-rt_v11-rev1/x86_64-13.2.0-release-posix-seh-ucrt-rt_v11-rev1.7z"
+        $MinGWZip = "$SetupDir\mingw.7z"
+        
+        try {
+            Invoke-WebRequest -Uri $MinGWUrl -OutFile $MinGWZip -UseBasicParsing
+            
+            # Try tar (built into Windows 10+)
+            tar xf $MinGWZip -C $SetupDir 2>$null
+            
+            if (!(Test-Path "$MinGWDir\bin\gcc.exe")) {
+                # Try 7z if available
+                $7z = "C:\Program Files\7-Zip\7z.exe"
+                if (Test-Path $7z) {
+                    & $7z x $MinGWZip -o"$SetupDir" -y | Out-Null
+                } else {
+                    Write-Host "  [!!] Cannot extract. Install 7-Zip or use Windows 10+" -ForegroundColor Red
+                    exit 1
+                }
+            }
+            
+            Remove-Item $MinGWZip -Force -ErrorAction SilentlyContinue
+            Write-Host "  [OK] MinGW installed" -ForegroundColor Green
+        } catch {
+            Write-Host "  [!!] All download methods failed." -ForegroundColor Red
+            Write-Host "       Please install manually: https://github.com/niXman/mingw-builds-binaries/releases" -ForegroundColor Gray
+            exit 1
+        }
     }
-    
-    Write-Host "  [..] Extracting MinGW..." -ForegroundColor Yellow
-    Expand-Archive -Path $MinGWZip -DestinationPath $SetupDir -Force
     
     Remove-Item $MinGWZip -Force -ErrorAction SilentlyContinue
     Write-Host "  [OK] MinGW installed" -ForegroundColor Green
