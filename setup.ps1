@@ -22,29 +22,20 @@ if (Test-Path $GCC) {
     Write-Host "  [OK] MinGW found" -ForegroundColor Green
 } else {
     Write-Host "  [..] Downloading MinGW (32MB)..." -ForegroundColor Yellow
-    $MinGWUrl = "https://github.com/niXman/mingw-builds-binaries/releases/download/13.2.0-rt_v11-rev1/x86_64-13.2.0-release-posix-seh-ucrt-rt_v11-rev1.7z"
-    $MinGWZip = "$SetupDir\mingw.7z"
+    $MinGWUrl = "https://github.com/niXman/mingw-builds-binaries/releases/download/13.2.0-rt_v11-rev1/x86_64-13.2.0-release-posix-seh-ucrt-rt_v11-rev1.zip"
+    $MinGWZip = "$SetupDir\mingw.zip"
     
     try {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-WebRequest -Uri $MinGWUrl -OutFile $MinGWZip -UseBasicParsing
     } catch {
-        Write-Host "  [!!] Download failed. Please install 7-Zip and try again." -ForegroundColor Red
-        Write-Host "       Or download MinGW from: https://github.com/niXman/mingw-builds-binaries/releases" -ForegroundColor Gray
+        Write-Host "  [!!] Download failed." -ForegroundColor Red
+        Write-Host "       Check your internet connection and try again." -ForegroundColor Gray
         exit 1
     }
     
     Write-Host "  [..] Extracting MinGW..." -ForegroundColor Yellow
-    $7z = "C:\Program Files\7-Zip\7z.exe"
-    if (!(Test-Path $7z)) { $7z = "C:\Program Files (x86)\7-Zip\7z.exe" }
-    
-    if (Test-Path $7z) {
-        & $7z x $MinGWZip -o"$SetupDir" -y | Out-Null
-    } else {
-        Write-Host "  [!!] 7-Zip not found. Install from: https://www.7-zip.org/" -ForegroundColor Red
-        Write-Host "       Then re-run this script." -ForegroundColor Gray
-        exit 1
-    }
+    Expand-Archive -Path $MinGWZip -DestinationPath $SetupDir -Force
     
     Remove-Item $MinGWZip -Force -ErrorAction SilentlyContinue
     Write-Host "  [OK] MinGW installed" -ForegroundColor Green
