@@ -21,8 +21,8 @@ $GCC = "$MinGWDir\bin\gcc.exe"
 if (Test-Path $GCC) {
     Write-Host "  [OK] MinGW found" -ForegroundColor Green
 } else {
-    Write-Host "  [..] Downloading MinGW (32MB)..." -ForegroundColor Yellow
-    $MinGWUrl = "https://github.com/niXman/mingw-builds-binaries/releases/download/13.2.0-rt_v11-rev1/x86_64-13.2.0-release-posix-seh-ucrt-rt_v11-rev1.zip"
+    Write-Host "  [..] Downloading MinGW (50MB)..." -ForegroundColor Yellow
+    $MinGWUrl = "https://github.com/brechtsanders/winlibs_mingw/releases/download/14.2.0-UCRT-rt_v12-rev0.2/Win64-14.2.0-release-posix-seh-ucrt-rt_v12-rev0.2.zip"
     $MinGWZip = "$SetupDir\mingw.zip"
     
     try {
