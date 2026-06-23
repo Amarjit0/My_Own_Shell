@@ -1,4 +1,8 @@
 #include "gupt/gupt.h"
+#include "gupt/tool_adapter.h"
+#include "gupt/dsl.h"
+#include "gupt/session.h"
+#include "gupt/knowledge.h"
 
 // Command history
 static char *history[MAX_HISTORY_SIZE];
@@ -21,9 +25,22 @@ static ks_command_t builtins[] = {
     {"close",   "close workspace",    NULL},
     {"spaces",  "list workspaces",    NULL},
     
-    // Tools
-    {"tools",   "list tools",         NULL},
+    // Tools (Adapters)
+    {"tools",   "list tool adapters", NULL},
     {"run",     "run a tool",         NULL},
+    
+    // DSL
+    {"gupt",    "run DSL script",     NULL},
+    {"script",  "execute DSL file",   NULL},
+    
+    // Session Recording
+    {"record",  "session recording",  NULL},
+    {"timeline","show session history", NULL},
+    
+    // Knowledge Base
+    {"note",    "add a note",         NULL},
+    {"notes",   "list notes",         NULL},
+    {"search",  "search knowledge",   NULL},
     
     // Scanning
     {"scan",    "run pipeline",       NULL},
@@ -37,10 +54,7 @@ static ks_command_t builtins[] = {
     {"score",   "calculate CVSS",     ks_cmd_cvss},
     {"graph",   "show asset graph",   ks_cmd_graph},
     {"dash",    "show dashboard",     NULL},
-    
-    // Other
-    {"ai",      "AI assistant",       ks_cmd_ai},
-    {"search",  "find something",     NULL},
+    {"analyze", "analysis engine",    NULL},
     
     {NULL, NULL, NULL}
 };
@@ -139,15 +153,15 @@ static int execute_command(char *input) {
     
     // Handle tools
     if (strcmp(argv[0], "tools") == 0 || strcmp(argv[0], "tool") == 0) {
-        return ks_tool_list();
+        return ks_adapter_list();
     }
     
     if (strcmp(argv[0], "run") == 0) {
         if (argc < 2) {
-            printf("Usage: run <tool> [args]\n");
+            printf("Usage: run <tool> [target]\n");
             return 1;
         }
-        return ks_orchestrator_run_tool(argv[1], argc > 2 ? argv[2] : NULL);
+        return ks_adapter_run(argv[1], argc > 2 ? argv[2] : NULL, NULL, NULL);
     }
     
     // Handle scanning
@@ -185,7 +199,70 @@ static int execute_command(char *input) {
         return ks_tui_draw_dashboard();
     }
     
-    // Handle search
+    // Handle DSL
+    if (strcmp(argv[0], "gupt") == 0 || strcmp(argv[0], "script") == 0) {
+        if (argc < 2) {
+            printf("Usage: gupt <script.dsl>\n");
+            return 1;
+        }
+        return ks_dsl_execute_file(argv[1]);
+    }
+    
+    // Handle session recording
+    if (strcmp(argv[0], "record") == 0) {
+        if (argc < 2) {
+            printf("Usage: record start <name>\n");
+            printf("       record stop\n");
+            printf("       record timeline\n");
+            return 1;
+        }
+        if (strcmp(argv[1], "start") == 0) {
+            return ks_session_start(argc > 2 ? argv[2] : "session", NULL);
+        }
+        if (strcmp(argv[1], "stop") == 0) {
+            return ks_session_stop();
+        }
+        if (strcmp(argv[1], "timeline") == 0) {
+            return ks_session_timeline();
+        }
+    }
+    
+    if (strcmp(argv[0], "timeline") == 0) {
+        return ks_session_timeline();
+    }
+    
+    // Handle knowledge base
+    if (strcmp(argv[0], "note") == 0) {
+        if (argc < 2) {
+            printf("Usage: note add <text>\n");
+            printf("       note list\n");
+            printf("       note search <query>\n");
+            return 1;
+        }
+        if (strcmp(argv[1], "add") == 0) {
+            if (argc < 3) {
+                printf("Usage: note add <text>\n");
+                return 1;
+            }
+            char note_text[4096] = {0};
+            for (int i = 2; i < argc; i++) {
+                if (i > 2) strcat(note_text, " ");
+                strcat(note_text, argv[i]);
+            }
+            return ks_knowledge_add(NOTE_GENERAL, note_text, NULL, NULL);
+        }
+        if (strcmp(argv[1], "list") == 0) {
+            return ks_knowledge_list(-1);
+        }
+        if (strcmp(argv[1], "search") == 0) {
+            if (argc < 4) {
+                printf("Usage: note search <query>\n");
+                return 1;
+            }
+            return ks_knowledge_search(argv[2]);
+        }
+    }
+    
     if (strcmp(argv[0], "search") == 0 || strcmp(argv[0], "find") == 0) {
         if (argc < 2) {
             printf("Usage: search <query>\n");
@@ -245,6 +322,9 @@ int ks_shell_init(ks_shell_t *shell) {
     ks_pipeline_init();
     ks_lua_init();
     ks_ai_init();
+    ks_adapter_init();
+    ks_session_init();
+    ks_knowledge_init(".");
     
     // Print banner
     printf(COLOR_CYAN);
@@ -335,30 +415,43 @@ int ks_cmd_help(int argc, char **argv) {
     printf("\n");
     
     printf("  " COLOR_BOLD "Tools:\n" COLOR_RESET);
-    printf("    tools             List available tools\n");
-    printf("    run <tool> [args] Run a tool\n");
+    printf("    tools             List tool adapters\n");
+    printf("    run <tool> [t]    Run a tool on target\n");
     printf("\n");
     
-    printf("  " COLOR_BOLD "Scanning:\n" COLOR_RESET);
-    printf("    scan <target>     Run full scan\n");
-    printf("    recon <target>    Run reconnaissance\n");
+    printf("  " COLOR_BOLD "Gupt DSL:\n" COLOR_RESET);
+    printf("    gupt <script.dsl> Run DSL script\n");
+    printf("    workspace <name>  Create workspace\n");
+    printf("    target <url>      Set target\n");
+    printf("    discover <type>   Run discovery\n");
+    printf("    test <type>       Run security test\n");
+    printf("    report <format>   Generate report\n");
     printf("\n");
     
-    printf("  " COLOR_BOLD "Analysis:\n" COLOR_RESET);
-    printf("    score <vector>    Calculate CVSS score\n");
-    printf("    graph             Show asset graph\n");
-    printf("    dash              Show dashboard\n");
+    printf("  " COLOR_BOLD "Session Recording:\n" COLOR_RESET);
+    printf("    record start <n>  Start recording\n");
+    printf("    record stop       Stop recording\n");
+    printf("    timeline          Show session history\n");
+    printf("\n");
+    
+    printf("  " COLOR_BOLD "Knowledge Base:\n" COLOR_RESET);
+    printf("    note add <text>   Add a note\n");
+    printf("    note list         List all notes\n");
+    printf("    note search <q>   Search notes\n");
+    printf("    search <query>    Search everything\n");
     printf("\n");
     
     printf("  " COLOR_BOLD "Findings:\n" COLOR_RESET);
     printf("    bug create <t> <s> Report a bug\n");
     printf("    bug list          List bugs\n");
+    printf("    score <vector>    Calculate CVSS\n");
     printf("    report            Generate report\n");
     printf("\n");
     
-    printf("  " COLOR_BOLD "Other:\n" COLOR_RESET);
-    printf("    search <query>    Search everything\n");
-    printf("    ai                AI assistant\n");
+    printf("  " COLOR_BOLD "Analysis:\n" COLOR_RESET);
+    printf("    analyze <file>    Analyze output\n");
+    printf("    graph             Show asset graph\n");
+    printf("    dash              Show dashboard\n");
     printf("\n");
     
     return KS_OK;

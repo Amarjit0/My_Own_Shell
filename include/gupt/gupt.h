@@ -345,8 +345,6 @@ int ks_ollama_init(const char *host, int port, const char *model);
 int ks_ollama_generate(const char *prompt, char *output, size_t output_size);
 
 // DSL
-int ks_dsl_execute(const char *script);
-int ks_dsl_execute_file(const char *filename);
 int ks_cmd_dsl(int argc, char **argv);
 
 // Lua

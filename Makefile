@@ -30,9 +30,10 @@ all: $(TARGET)
 
 # Create build directories
 $(shell mkdir -p $(BUILDDIR)/core $(BUILDDIR)/parser $(BUILDDIR)/completion \
-    $(BUILDDIR)/workspace $(BUILDDIR)/tools $(BUILDDIR)/graph \
+    $(BUILDDIR)/workspace $(BUILDDIR)/tools $(BUILDDIR)/adapters $(BUILDDIR)/graph \
     $(BUILDDIR)/scripting $(BUILDDIR)/tui $(BUILDDIR)/findings \
     $(BUILDDIR)/reports $(BUILDDIR)/plugins $(BUILDDIR)/ai \
+    $(BUILDDIR)/session $(BUILDDIR)/knowledge \
     $(BUILDDIR)/utils)
 
 # Compile source files
